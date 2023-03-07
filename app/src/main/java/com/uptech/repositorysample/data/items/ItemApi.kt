@@ -14,12 +14,14 @@ class ItemApi(private val userManager: UserManager) {
     Item("dragonpriest_mask", "Dragon priest mask", 1200, 2, R.drawable.dragonpriest_mask),
   )
 
-  suspend fun getItems(): List<Item> =
-    if (userManager.userToken.first() === null) {
+  suspend fun getItems(): List<Item> {
+    throw RuntimeException("Exception from ItemApi.getItems")
+    return if (userManager.userToken.first() === null) {
       throw IllegalStateException("Unauthorized request")
     } else {
       mockedData
     }
+  }
 
   fun buy(item: Item) {
     mockedData[mockedData.indexOfFirst { it.id == item.id }] = item.copy(countOnStock = item.countOnStock - 1)
